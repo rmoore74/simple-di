@@ -14,7 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Inject
-    public Car(final UserRepository userRepository) {
+    public UserService(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
     
@@ -26,8 +26,8 @@ To create the DI container, pass the base package via the `ContainerFactory` fac
 ```
 public static void main(String args[]) {
     Container diContainer = ContainerFactory.newAnnotationBasedContainer("org.somedomain.beans");
-    diContainer.get(UserService.class);
-    diContainer.get("customBeanQualifier");
+    UserService userService = diContainer.get(UserService.class);
+    UserService userService = diContainer.get("customBeanQualifier");
     
     ...
 }
