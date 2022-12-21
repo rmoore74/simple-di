@@ -9,7 +9,7 @@ class ContainerFactoryTest {
 
     @Test
     void givenBasePackage_createNewAnnotationBasedContainer() {
-        Container container = ContainerFactory.newAnnotationBasedContext(this.getClass().getPackageName() + ".annotation.beans");
+        Container container = ContainerFactory.newAnnotationBasedContainer(this.getClass().getPackageName() + ".annotation.beans");
         assertThat(container)
                 .isNotNull()
                 .isInstanceOf(AnnotationContainer.class);

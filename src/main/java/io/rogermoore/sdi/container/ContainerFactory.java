@@ -11,7 +11,7 @@ public class ContainerFactory {
         throw new IllegalArgumentException("Do not construct.");
     }
 
-    public static Container newAnnotationBasedContext(final String basePackage) {
+    public static Container newAnnotationBasedContainer(final String basePackage) {
         return new AnnotationContainer(
                 new AnnotationBeanLoader(basePackage),
                 new AnnotationBeanGraphHelper(new BeanGraph()));
