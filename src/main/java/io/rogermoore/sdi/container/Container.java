@@ -1,33 +1,55 @@
 package io.rogermoore.sdi.container;
 
-import io.rogermoore.sdi.bean.BeanGraphHelper;
-import io.rogermoore.sdi.bean.BeanLoader;
+import io.rogermoore.sdi.bean.graph.BeanGraph;
+import io.rogermoore.sdi.container.exception.ContainerInitialisationException;
+
+import javax.inject.Named;
 
 public abstract class Container {
 
-    private final BeanLoader beanLoader;
-    private final BeanGraphHelper beanGraphHelper;
+    private final BeanGraph beanGraph;
 
-    protected Container(final BeanLoader beanLoader,
-                        final BeanGraphHelper beanGraphHelper) {
-        this.beanLoader = beanLoader;
-        this.beanGraphHelper = beanGraphHelper;
+    private boolean initialised;
 
-        this.initialise();
+    protected Container(final BeanGraph beanGraph) {
+        this.beanGraph = beanGraph;
     }
 
-    private void initialise() {
-        for (Class<?> clazz : beanLoader.load()) {
-            beanGraphHelper.add(clazz);
-        }
-        beanGraphHelper.initialiseGraph();
+    public abstract void initialise();
+
+    protected void setInitialised() {
+        initialised = true;
     }
 
-    public <T> T getBean(final String qualifier, Class<T> clazz) {
-        return beanGraphHelper.get(qualifier, clazz);
+    protected BeanGraph getBeanGraph() {
+        return beanGraph;
     }
 
     public <T> T getBean(final Class<T> beanClass) {
-        return beanGraphHelper.get(beanClass);
+        T bean = getBean(beanClass.getName(), beanClass);
+        if (bean != null) {
+            return bean;
+        }
+
+        Named named = beanClass.getAnnotation(Named.class);
+        if (named == null || "".equals(named.value())) {
+            return null;
+        }
+
+        return getBean(named.value(), beanClass);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getBean(final String qualifier, Class<T> clazz) {
+        if (!initialised) {
+            throw new ContainerInitialisationException("Container not initialised!");
+        }
+        if (!beanGraph.contains(qualifier)) {
+            return null;
+        }
+        if (beanGraph.get(qualifier).getType() != clazz) {
+            return null;
+        }
+        return (T) beanGraph.get(qualifier).getInstance();
     }
 }

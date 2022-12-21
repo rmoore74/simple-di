@@ -1,13 +1,16 @@
 package io.rogermoore.sdi.container.annotation;
 
-import io.rogermoore.sdi.bean.BeanGraph;
 import io.rogermoore.sdi.container.annotation.beans.FirstBean;
 import io.rogermoore.sdi.container.annotation.beans.NotAnnotated;
 import io.rogermoore.sdi.container.annotation.beans.second.SecondBean;
 import io.rogermoore.sdi.container.annotation.beans.second.fourth.FourthBean;
 import io.rogermoore.sdi.container.annotation.beans.second.third.ThirdBean;
-import org.junit.jupiter.api.BeforeEach;
+import io.rogermoore.sdi.container.annotation.loader.ClassBeanDefinitionLoader;
+import io.rogermoore.sdi.container.annotation.loader.MethodBeanDefinitionLoader;
+import io.rogermoore.sdi.container.annotation.loader.util.ClassLoaderUtil;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -15,18 +18,12 @@ class AnnotationContainerTest {
 
     private static final String BASE_PACKAGE = "io.rogermoore.sdi.container.annotation.beans";
 
-    private AnnotationBeanLoader beanLoader;
-    private AnnotationBeanGraphHelper beanGraphHelper;
-
-    @BeforeEach
-    void setup() {
-        beanLoader = new AnnotationBeanLoader(BASE_PACKAGE);
-        beanGraphHelper = new AnnotationBeanGraphHelper(new BeanGraph());
-    }
-
     @Test
     void givenBasePackage_loadAllAnnotatedBeans() {
-        var container = new AnnotationContainer(beanLoader, beanGraphHelper);
+        Set<Class<?>> classes = ClassLoaderUtil.loadClassesInPackage(BASE_PACKAGE);
+        var container = new AnnotationContainer(new ClassBeanDefinitionLoader(classes));
+
+        container.initialise();
 
         assertThat(container.getBean(FirstBean.class)).isNotNull();
         assertThat(container.getBean("qualifiedPrototypeBean", SecondBean.class)).isNotNull();
@@ -37,8 +34,23 @@ class AnnotationContainerTest {
 
     @Test
     void givenClassInsteadOfQualifier_fallBackToUsingQualifierProvidedInAnnotation() {
-        var container = new AnnotationContainer(beanLoader, beanGraphHelper);
+        Set<Class<?>> classes = ClassLoaderUtil.loadClassesInPackage(BASE_PACKAGE);
+        var container = new AnnotationContainer(new ClassBeanDefinitionLoader(classes));
+
+        container.initialise();
+
         assertThat(container.getBean(SecondBean.class)).isNotNull();
+    }
+
+    @Test
+    void givenMethodLevelLoader_loadAllBeanAnnotatedMethods() {
+        Set<Class<?>> classes = ClassLoaderUtil.loadClassesInPackage(BASE_PACKAGE + ".config");
+        var container = new AnnotationContainer(new MethodBeanDefinitionLoader(classes));
+
+        container.initialise();
+
+        assertThat(container.getBean(FirstBean.class)).isNotNull();
+        assertThat(container.getBean(FourthBean.class)).isNotNull();
     }
 
 }

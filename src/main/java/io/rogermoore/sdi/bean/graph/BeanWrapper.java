@@ -1,4 +1,6 @@
-package io.rogermoore.sdi.bean;
+package io.rogermoore.sdi.bean.graph;
+
+import io.rogermoore.sdi.bean.BeanInstantiationException;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -33,14 +35,11 @@ public class BeanWrapper<T> {
 
         for (int i=0; i < dependencies.length; i++) {
             dependencies[i].init();
-            dependencyParameterTypes[i] = dependencies[i].type;
-            dependencyInstances[i] = dependencies[i].instance;
+            dependencyParameterTypes[i] = dependencies[i].getType();
+            dependencyInstances[i] = dependencies[i].getInstance();
         }
 
-        if (singleton) {
-            instance = createNewInstance();
-        }
-
+        instance = createNewInstance();
         initialised = true;
     }
 

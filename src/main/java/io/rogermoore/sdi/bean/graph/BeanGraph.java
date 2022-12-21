@@ -1,5 +1,8 @@
-package io.rogermoore.sdi.bean;
+package io.rogermoore.sdi.bean.graph;
 
+import io.rogermoore.sdi.bean.definition.BeanDefinition;
+
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -11,9 +14,11 @@ public class BeanGraph {
         this.beans = new ConcurrentHashMap<>();
     }
 
-    public void init() {
-        for (var bean : beans.values()) {
-            bean.init();
+    public void load(final Map<String, BeanDefinition<?>> definitions) {
+        BeanLoader beanLoader = new BeanLoader(this, definitions);
+        beanLoader.load();
+        for (var qualifier : definitions.keySet()) {
+            beans.get(qualifier).init();
         }
     }
 

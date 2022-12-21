@@ -1,9 +1,7 @@
-package io.rogermoore.sdi.container.annotation;
+package io.rogermoore.sdi.container.annotation.loader.util;
 
-import io.rogermoore.sdi.bean.BeanLoader;
 import io.rogermoore.sdi.container.exception.ContainerInitialisationException;
 
-import javax.inject.Named;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,16 +11,14 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 
-public class AnnotationBeanLoader implements BeanLoader {
+public class ClassLoaderUtil {
 
-    private final String basePackage;
-
-    public AnnotationBeanLoader(final String basePackage) {
-        this.basePackage = basePackage;
+    private ClassLoaderUtil() {
+        throw new IllegalStateException("Do not construct.");
     }
 
-    public Set<Class<?>> load() {
-        Set<Class<?>> beanClasses = new HashSet<>();
+    public static Set<Class<?>> loadClassesInPackage(final String basePackage) {
+        Set<Class<?>> classes = new HashSet<>();
 
         Queue<String> packages = new LinkedList<>();
         packages.add(basePackage);
@@ -36,20 +32,17 @@ public class AnnotationBeanLoader implements BeanLoader {
             reader.lines()
                     .forEach(line -> {
                         if (line.endsWith(".class")) {
-                            Class<?> clazz = loadClass(currentPackage, line);
-                            if (clazz.getAnnotation(Named.class) != null) {
-                                beanClasses.add(clazz);
-                            }
+                            classes.add(loadClass(currentPackage, line));
                         } else {
                             packages.add(currentPackage + "." + line);
                         }
                     });
         }
 
-        return beanClasses;
+        return classes;
     }
 
-    private Class<?> loadClass(final String packageName,
+    private static Class<?> loadClass(final String packageName,
                                final String className) {
         String classPath = packageName + "." + className.substring(0, className.lastIndexOf('.'));
         try {

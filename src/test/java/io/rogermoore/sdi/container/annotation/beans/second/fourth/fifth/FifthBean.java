@@ -9,6 +9,9 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public class FifthBean {
+    private final SecondBean secondBean;
     @Inject
-    public FifthBean(SecondBean secondBean) {}
+    public FifthBean(@Named("qualifiedPrototypeBean") SecondBean secondBean) {
+        this.secondBean = secondBean;
+    }
 }

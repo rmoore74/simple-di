@@ -1,7 +1,12 @@
-package io.rogermoore.sdi.bean;
+package io.rogermoore.sdi.bean.graph;
 
+import io.rogermoore.sdi.bean.BeanInstantiationException;
+import io.rogermoore.sdi.bean.definition.BeanDefinition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
@@ -25,13 +30,12 @@ class BeanGraphTest {
     }
 
     @Test
-    void givenBeansInGraph_initialiseBeans() {
-        var bean1 = new BeanWrapper<>(DummyBean.class, "bean1", true, new BeanWrapper[]{});
-        underTest.add(bean1);
-        var bean2 = new BeanWrapper<>(DummyBean.class, "bean2", true, new BeanWrapper[]{});
-        underTest.add(bean2);
+    void givenBeanDefinitions_loadBeans() {
+        Map<String, BeanDefinition<?>> input = new HashMap<>();
+        input.put("bean1", new BeanDefinition<>(DummyBean.class, "bean1", true, new String[]{}));
+        input.put("bean2", new BeanDefinition<>(DummyBean.class, "bean2", true, new String[]{}));
 
-        underTest.init();
+        underTest.load(input);
 
         assertThat(underTest.get("bean1").getInstance()).isNotNull();
         assertThat(underTest.get("bean2").getInstance()).isNotNull();

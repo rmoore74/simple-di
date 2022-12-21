@@ -1,9 +1,12 @@
 package io.rogermoore.sdi.container;
 
-import io.rogermoore.sdi.bean.BeanGraph;
-import io.rogermoore.sdi.container.annotation.AnnotationBeanGraphHelper;
-import io.rogermoore.sdi.container.annotation.AnnotationBeanLoader;
+import io.rogermoore.sdi.bean.definition.CompositeDefinitionLoader;
 import io.rogermoore.sdi.container.annotation.AnnotationContainer;
+import io.rogermoore.sdi.container.annotation.loader.ClassBeanDefinitionLoader;
+import io.rogermoore.sdi.container.annotation.loader.MethodBeanDefinitionLoader;
+import io.rogermoore.sdi.container.annotation.loader.util.ClassLoaderUtil;
+
+import java.util.Set;
 
 public class ContainerFactory {
 
@@ -12,9 +15,13 @@ public class ContainerFactory {
     }
 
     public static Container newAnnotationBasedContainer(final String basePackage) {
+        Set<Class<?>> baseClasses = ClassLoaderUtil.loadClassesInPackage(basePackage);
         return new AnnotationContainer(
-                new AnnotationBeanLoader(basePackage),
-                new AnnotationBeanGraphHelper(new BeanGraph()));
+                CompositeDefinitionLoader.from(
+                        new ClassBeanDefinitionLoader(baseClasses),
+                        new MethodBeanDefinitionLoader(baseClasses)
+                )
+        );
     }
 
 }

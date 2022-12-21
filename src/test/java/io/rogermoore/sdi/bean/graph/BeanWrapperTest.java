@@ -1,5 +1,6 @@
-package io.rogermoore.sdi.bean;
+package io.rogermoore.sdi.bean.graph;
 
+import io.rogermoore.sdi.bean.BeanInstantiationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
