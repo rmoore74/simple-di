@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class BeanWrapper<T> {
 
-    private final Class<T> beanClass;
+    private final Class<T> type;
     private final String qualifier;
     private final boolean singleton;
     private final BeanWrapper<?>[] dependencies;
@@ -14,11 +14,11 @@ public class BeanWrapper<T> {
     private boolean initialised = false;
     private T instance;
 
-    public BeanWrapper(final Class<T> beanClass,
+    public BeanWrapper(final Class<T> type,
                        final String qualifier,
                        final boolean singleton,
                        final BeanWrapper<?>[] dependencies) {
-        this.beanClass = beanClass;
+        this.type = type;
         this.qualifier = qualifier;
         this.singleton = singleton;
         this.dependencies = dependencies;
@@ -33,7 +33,7 @@ public class BeanWrapper<T> {
 
         for (int i=0; i < dependencies.length; i++) {
             dependencies[i].init();
-            dependencyParameterTypes[i] = dependencies[i].beanClass;
+            dependencyParameterTypes[i] = dependencies[i].type;
             dependencyInstances[i] = dependencies[i].instance;
         }
 
@@ -42,6 +42,10 @@ public class BeanWrapper<T> {
         }
 
         initialised = true;
+    }
+
+    public Class<T> getType() {
+        return type;
     }
 
     public T getInstance() {
@@ -57,7 +61,7 @@ public class BeanWrapper<T> {
 
     private T createNewInstance() {
         try {
-            return beanClass
+            return type
                     .getDeclaredConstructor(dependencyParameterTypes)
                     .newInstance(dependencyInstances);
         } catch (NoSuchMethodException | InstantiationException

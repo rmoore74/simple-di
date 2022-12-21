@@ -29,8 +29,8 @@ class AnnotationContainerTest {
         var container = new AnnotationContainer(beanLoader, beanGraphHelper);
 
         assertThat(container.getBean(FirstBean.class)).isNotNull();
-        assertThat((SecondBean) container.getBean("qualifiedPrototypeBean")).isNotNull();
-        assertThat((ThirdBean) container.getBean("thirdBean")).isNotNull();
+        assertThat(container.getBean("qualifiedPrototypeBean", SecondBean.class)).isNotNull();
+        assertThat(container.getBean("thirdBean", ThirdBean.class)).isNotNull();
         assertThat(container.getBean(FourthBean.class)).isNotNull();
         assertThat(container.getBean(NotAnnotated.class)).isNull();
     }

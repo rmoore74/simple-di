@@ -47,7 +47,7 @@ class AnnotationBeanGraphHelperTest {
 
         underTest.initialiseGraph();
 
-        assertThat((SecondBean) underTest.get("qualifiedPrototypeBean")).isNotNull();
+        assertThat(underTest.get("qualifiedPrototypeBean", SecondBean.class)).isNotNull();
     }
 
     @Test

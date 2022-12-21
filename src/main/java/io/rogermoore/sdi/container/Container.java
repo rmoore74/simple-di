@@ -23,8 +23,8 @@ public abstract class Container {
         beanGraphHelper.initialiseGraph();
     }
 
-    public <T> T getBean(final String qualifier) {
-        return beanGraphHelper.get(qualifier);
+    public <T> T getBean(final String qualifier, Class<T> clazz) {
+        return beanGraphHelper.get(qualifier, clazz);
     }
 
     public <T> T getBean(final Class<T> beanClass) {
