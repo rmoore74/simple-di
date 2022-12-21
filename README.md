@@ -24,7 +24,7 @@ public class UserService {
 You can also create beans at method level by storing them in a class annotated with the `@Beans` tag.
 ```
 @Beans
-public class UserConfig {
+public class UserBeans {
 
     @Named
     public UserService userService(final UserRepository userRepository) {
