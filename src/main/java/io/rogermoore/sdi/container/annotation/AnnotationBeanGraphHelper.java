@@ -55,6 +55,7 @@ public class AnnotationBeanGraphHelper implements BeanGraphHelper {
         return new BeanWrapper[]{};
     }
 
+    @Override
     public <T> T get(Class<T> beanClass) {
         T bean = get(beanClass.getName());
         if (bean != null) {
@@ -69,6 +70,7 @@ public class AnnotationBeanGraphHelper implements BeanGraphHelper {
         return get(annotation.qualifier());
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T get(String qualifier) {
         if (!beanGraph.contains(qualifier)) {
