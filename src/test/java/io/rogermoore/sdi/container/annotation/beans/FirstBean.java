@@ -1,10 +1,13 @@
 package io.rogermoore.sdi.container.annotation.beans;
 
-import io.rogermoore.sdi.container.annotation.Bean;
-import io.rogermoore.sdi.container.annotation.Inject;
 import io.rogermoore.sdi.container.annotation.beans.second.fourth.FourthBean;
 
-@Bean
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+@Named
+@Singleton
 public class FirstBean {
     private final FourthBean fourthBean;
 

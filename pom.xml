@@ -12,13 +12,19 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <surefire.version>3.0.0-M7</surefire.version>
+        <javax.version>1</javax.version>
         <junit.version>5.8.2</junit.version>
         <assertj.version>3.22.0</assertj.version>
         <mockito.version>4.5.1</mockito.version>
-        <surefire.version>3.0.0-M7</surefire.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>${javax.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

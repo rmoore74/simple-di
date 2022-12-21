@@ -1,7 +1,7 @@
 package io.rogermoore.sdi.container.annotation.beans.second;
 
-import io.rogermoore.sdi.container.annotation.Bean;
+import javax.inject.Named;
 
-@Bean(qualifier = "qualifiedPrototypeBean", singleton = false)
+@Named("qualifiedPrototypeBean")
 public class SecondBean {
 }

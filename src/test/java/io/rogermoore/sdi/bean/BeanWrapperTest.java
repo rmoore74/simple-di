@@ -27,7 +27,7 @@ class BeanWrapperTest {
     }
 
     @Test
-    void givenPrototypBean_createUniqueInstanceEachTime() {
+    void givenPrototypeBean_createUniqueInstanceEachTime() {
         var bean = new BeanWrapper<>(DummyBean.class, "qualifier", false, new BeanWrapper[]{});
         bean.init();
 

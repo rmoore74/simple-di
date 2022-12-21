@@ -3,6 +3,7 @@ package io.rogermoore.sdi.container.annotation;
 import io.rogermoore.sdi.bean.BeanLoader;
 import io.rogermoore.sdi.container.exception.ContainerInitialisationException;
 
+import javax.inject.Named;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,7 +37,7 @@ public class AnnotationBeanLoader implements BeanLoader {
                     .forEach(line -> {
                         if (line.endsWith(".class")) {
                             Class<?> clazz = loadClass(currentPackage, line);
-                            if (clazz.getAnnotation(Bean.class) != null) {
+                            if (clazz.getAnnotation(Named.class) != null) {
                                 beanClasses.add(clazz);
                             }
                         } else {

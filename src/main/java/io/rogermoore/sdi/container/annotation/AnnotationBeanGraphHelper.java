@@ -4,6 +4,10 @@ import io.rogermoore.sdi.bean.BeanGraph;
 import io.rogermoore.sdi.bean.BeanGraphHelper;
 import io.rogermoore.sdi.bean.BeanWrapper;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 public class AnnotationBeanGraphHelper implements BeanGraphHelper {
 
     private final BeanGraph beanGraph;
@@ -14,8 +18,8 @@ public class AnnotationBeanGraphHelper implements BeanGraphHelper {
 
     @Override
     public <T> BeanWrapper<T> add(Class<T> beanClass) {
-        Bean annotation = beanClass.getAnnotation(Bean.class);
-        if (annotation == null) {
+        Named named = beanClass.getAnnotation(Named.class);
+        if (named == null) {
             throw new IllegalArgumentException("Class provided is not a bean!");
         }
 
@@ -24,7 +28,7 @@ public class AnnotationBeanGraphHelper implements BeanGraphHelper {
             return beanGraph.get(qualifier);
         }
 
-        boolean singleton = annotation.singleton();
+        boolean singleton = beanClass.getAnnotation(Singleton.class) != null;
         BeanWrapper<?>[] dependencies = getDependencies(beanClass);
 
         BeanWrapper<T> beanWrapper =  new BeanWrapper<>(beanClass, qualifier, singleton, dependencies);
@@ -34,9 +38,9 @@ public class AnnotationBeanGraphHelper implements BeanGraphHelper {
     }
 
     private String getQualifier(Class<?> beanClass) {
-        Bean annotation = beanClass.getAnnotation(Bean.class);
-        if (!"".equals(annotation.qualifier())) {
-            return annotation.qualifier();
+        Named named = beanClass.getAnnotation(Named.class);
+        if (!"".equals(named.value())) {
+            return named.value();
         }
         return beanClass.getName();
     }
@@ -62,12 +66,12 @@ public class AnnotationBeanGraphHelper implements BeanGraphHelper {
             return bean;
         }
 
-        Bean annotation = beanClass.getAnnotation(Bean.class);
-        if (annotation == null || "".equals(annotation.qualifier())) {
+        Named named = beanClass.getAnnotation(Named.class);
+        if (named == null || "".equals(named.value())) {
             return null;
         }
 
-        return get(annotation.qualifier(), beanClass);
+        return get(named.value(), beanClass);
     }
 
     @Override
