@@ -1,28 +1,15 @@
 package io.rogermoore.sdi.container;
 
-import io.rogermoore.sdi.bean.graph.BeanGraph;
-import io.rogermoore.sdi.container.exception.ContainerInitialisationException;
+import io.rogermoore.sdi.bean.BeanGraph;
 
 import javax.inject.Named;
 
-public abstract class Container {
+public class Container {
 
     private final BeanGraph beanGraph;
 
-    private boolean initialised;
-
-    protected Container(final BeanGraph beanGraph) {
+    Container(final BeanGraph beanGraph) {
         this.beanGraph = beanGraph;
-    }
-
-    public abstract void initialise();
-
-    protected void setInitialised() {
-        initialised = true;
-    }
-
-    protected BeanGraph getBeanGraph() {
-        return beanGraph;
     }
 
     public <T> T getBean(final Class<T> beanClass) {
@@ -41,9 +28,6 @@ public abstract class Container {
 
     @SuppressWarnings("unchecked")
     public <T> T getBean(final String qualifier, Class<T> clazz) {
-        if (!initialised) {
-            throw new ContainerInitialisationException("Container not initialised!");
-        }
         if (!beanGraph.contains(qualifier)) {
             return null;
         }

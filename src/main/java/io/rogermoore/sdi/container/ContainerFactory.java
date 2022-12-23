@@ -1,11 +1,13 @@
 package io.rogermoore.sdi.container;
 
-import io.rogermoore.sdi.bean.definition.CompositeDefinitionLoader;
-import io.rogermoore.sdi.container.annotation.AnnotationContainer;
-import io.rogermoore.sdi.container.annotation.loader.ClassBeanDefinitionLoader;
-import io.rogermoore.sdi.container.annotation.loader.MethodBeanDefinitionLoader;
+import io.rogermoore.sdi.bean.Bean;
+import io.rogermoore.sdi.bean.loader.CompositeBeanLoader;
+import io.rogermoore.sdi.bean.BeanGraph;
+import io.rogermoore.sdi.container.annotation.loader.ClassBeanLoader;
+import io.rogermoore.sdi.container.annotation.loader.MethodBeanLoader;
 import io.rogermoore.sdi.container.annotation.loader.util.ClassLoaderUtil;
 
+import java.util.Map;
 import java.util.Set;
 
 public class ContainerFactory {
@@ -16,12 +18,12 @@ public class ContainerFactory {
 
     public static Container newAnnotationBasedContainer(final String basePackage) {
         Set<Class<?>> baseClasses = ClassLoaderUtil.loadClassesInPackage(basePackage);
-        return new AnnotationContainer(
-                CompositeDefinitionLoader.from(
-                        new ClassBeanDefinitionLoader(baseClasses),
-                        new MethodBeanDefinitionLoader(baseClasses)
-                )
-        );
+        Map<String, Bean<?>> beans = CompositeBeanLoader.from(
+                new ClassBeanLoader(baseClasses),
+                new MethodBeanLoader(baseClasses)
+        ).load();
+        BeanGraph beanGraph = new BeanGraph(beans);
+        return new Container(beanGraph);
     }
 
 }

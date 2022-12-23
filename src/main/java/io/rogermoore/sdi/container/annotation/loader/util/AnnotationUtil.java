@@ -3,6 +3,7 @@ package io.rogermoore.sdi.container.annotation.loader.util;
 import javax.inject.Named;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Optional;
 
 public class AnnotationUtil {
@@ -19,6 +20,11 @@ public class AnnotationUtil {
     public static String getQualifier(final Method method) {
         return getNamedValue(method)
                 .orElse(method.getName());
+    }
+
+    public static String getQualifier(final Parameter parameter) {
+        return getNamedValue(parameter)
+                .orElse(parameter.getType().getName());
     }
 
     private static Optional<String> getNamedValue(final AnnotatedElement elem) {

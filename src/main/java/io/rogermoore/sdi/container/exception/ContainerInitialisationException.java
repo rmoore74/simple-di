@@ -7,4 +7,8 @@ public class ContainerInitialisationException extends RuntimeException {
     public ContainerInitialisationException(final String basePackage) {
         super(String.format(MESSAGE, basePackage));
     }
+
+    public ContainerInitialisationException(final Throwable throwable) {
+        super(throwable);
+    }
 }
