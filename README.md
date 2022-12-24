@@ -44,7 +44,6 @@ To create the DI container, pass the base package via the `ContainerFactory` fac
 ```
 public static void main(String args[]) {
     Container diContainer = ContainerFactory.newAnnotationBasedContainer("org.somedomain.beans");
-    diContainer.initialise();
     
     UserService userService = diContainer.get(UserService.class);
     UserRepository userRepository = diContainer.get("repositoryQualifier", UserService.class);
