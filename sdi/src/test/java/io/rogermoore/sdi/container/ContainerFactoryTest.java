@@ -5,10 +5,7 @@ import io.rogermoore.sdi.container.annotation.beans.NotAnnotated;
 import io.rogermoore.sdi.container.annotation.beans.second.SecondBean;
 import io.rogermoore.sdi.container.annotation.beans.second.fourth.FourthBean;
 import io.rogermoore.sdi.container.annotation.beans.second.third.ThirdBean;
-import io.rogermoore.sdi.container.annotation.loader.util.ClassLoaderUtil;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
