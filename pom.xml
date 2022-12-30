@@ -11,6 +11,7 @@
 
     <modules>
         <module>sdi</module>
+        <module>http</module>
     </modules>
 
     <properties>
@@ -48,6 +49,11 @@
                 <artifactId>mockito-junit-jupiter</artifactId>
                 <version>${mockito.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rogermoore</groupId>
+                <artifactId>sdi</artifactId>
+                <version>${version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

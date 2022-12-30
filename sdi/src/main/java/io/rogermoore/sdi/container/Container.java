@@ -1,8 +1,10 @@
 package io.rogermoore.sdi.container;
 
+import io.rogermoore.sdi.bean.Bean;
 import io.rogermoore.sdi.bean.BeanGraph;
 
 import javax.inject.Named;
+import java.util.Collection;
 
 public class Container {
 
@@ -10,6 +12,10 @@ public class Container {
 
     Container(final BeanGraph beanGraph) {
         this.beanGraph = beanGraph;
+    }
+
+    public Collection<Bean<?>> getBeans() {
+        return beanGraph.getAll();
     }
 
     public <T> T getBean(final Class<T> beanClass) {

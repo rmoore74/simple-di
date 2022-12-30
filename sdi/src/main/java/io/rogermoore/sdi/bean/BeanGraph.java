@@ -1,5 +1,6 @@
 package io.rogermoore.sdi.bean;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -38,6 +39,10 @@ public class BeanGraph {
 
     public boolean contains(final String qualifier) {
         return beanMap.containsKey(qualifier);
+    }
+
+    public Collection<Bean<?>> getAll() {
+        return beanMap.values();
     }
 
     @SuppressWarnings("unchecked")
